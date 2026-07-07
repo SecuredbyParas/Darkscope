@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+    <div>
+      <div class="eyebrow mb-1">Welcome back, {{ user["username"] }}</div>
+      <h2 class="font-mono mb-0">Exposure Dashboard</h2>
+    </div>
+    <a href="{{ url_for('scan') }}" class="btn btn-ds-accent">Run a new scan</a>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="ds-card p-3">
+        <div class="text-muted-ds" style="font-size:0.78rem;">Scans run</div>
+        <div class="font-mono fw-bold" style="font-size:1.6rem;">{{ history|length }}</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="ds-card p-3">
+        <div class="text-muted-ds" style="font-size:0.78rem;">Breaches found*</div>
+        <div class="font-mono fw-bold" style="font-size:1.6rem; color: var(--danger);">
+          {{ history|selectattr("result", "equalto", "breached")|list|length }}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="ds-card p-3">
+        <div class="text-muted-ds" style="font-size:0.78rem;">MFA status</div>
+        <div class="status-pill safe mt-1">Enabled</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="ds-card p-3">
+        <div class="text-muted-ds" style="font-size:0.78rem;">Industry credential-breach rate</div>
+        <div class="font-mono fw-bold" style="font-size:1.6rem; color: var(--accent);">{{ dbir_stats.breaches_involving_credentials_pct }}%</div>
+      </div>
+    </div>
+  </div>
+  <div class="text-muted-ds mb-4" style="font-size:0.72rem;">*Within this simulator's synthetic dataset only.</div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-lg-7">
+      <div class="ds-card h-100">
+        <div class="ds-card-header">DBIR-style credential breach trend (illustrative)</div>
+        <div class="p-3">
+          <canvas id="trendChart" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="ds-card h-100">
+        <div class="ds-card-header">Human-element factors (illustrative)</div>
+        <div class="p-3">
+          <canvas id="factorsChart" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-lg-7">
+      <div class="ds-card h-100">
+        <div class="ds-card-header">Recent scan history</div>
+        <div class="p-3">
+          {% if history %}
+            <table class="table table-borderless align-middle mb-0" style="color: var(--text); font-size: 0.88rem;">
+              <thead>
+                <tr class="text-muted-ds" style="font-size:0.75rem;">
+                  <th>Email scanned</th>
+                  <th>Result</th>
+                  <th>Sources</th>
+                  <th>When</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for h in history %}
+                <tr style="border-top: 1px solid var(--border);">
+                  <td class="font-mono">{{ h["scanned_email"] }}</td>
+                  <td>
+                    {% if h["result"] == "breached" %}
+                      <span class="status-pill danger">Exposed</span>
+                    {% else %}
+                      <span class="status-pill safe">Clean</span>
+                    {% endif %}
+                  </td>
+                  <td class="text-muted-ds">{{ h["matched_sources"] or "—" }}</td>
+                  <td class="text-muted-ds">{{ h["scanned_at"] }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <p class="text-muted-ds mb-0">No scans yet. <a href="{{ url_for('scan') }}">Run your first scan</a>.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="ds-card h-100">
+        <div class="ds-card-header">Top techniques seen in your scans</div>
+        <div class="p-3">
+          {% if top_techniques %}
+            {% for t in top_techniques %}
+            <div class="technique-row mb-2">
+              <div class="code">{{ t.code }} &middot; {{ t.tactic }}</div>
+              <div style="font-size: 0.88rem;">{{ t.name }}</div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <p class="text-muted-ds mb-0">Run a scan to see which attacker techniques apply to you.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+  const gridColor = "#232a3b";
+  const textColor = "#8b92a5";
+  Chart.defaults.color = textColor;
+  Chart.defaults.font.family = "Inter, sans-serif";
+
+  const trendCtx = document.getElementById('trendChart');
+  new Chart(trendCtx, {
+    type: 'line',
+    data: {
+      labels: [{% for d in dbir_trend %}"{{ d.year }}",{% endfor %}],
+      datasets: [{
+        label: 'Credential-driven breaches (%)',
+        data: [{% for d in dbir_trend %}{{ d.credential_breaches_pct }},{% endfor %}],
+        borderColor: '#4fd1ff',
+        backgroundColor: 'rgba(79, 209, 255, 0.12)',
+        tension: 0.35,
+        fill: true,
+        pointBackgroundColor: '#4fd1ff',
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: gridColor } },
+        y: { grid: { color: gridColor }, suggestedMin: 40, suggestedMax: 80 }
+      }
+    }
+  });
+
+  const factorsCtx = document.getElementById('factorsChart');
+  new Chart(factorsCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Credentials', 'Phishing', 'Human element', 'MFA gap'],
+      datasets: [{
+        data: [
+          {{ dbir_stats.breaches_involving_credentials_pct }},
+          {{ dbir_stats.breaches_involving_phishing_pct }},
+          {{ dbir_stats.breaches_involving_human_element_pct }},
+          {{ dbir_stats.orgs_with_mfa_gap_pct }}
+        ],
+        backgroundColor: ['#ff3d57', '#4fd1ff', '#ffb84f', '#00d9a3'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 10 } } }
+    }
+  });
+</script>
+{% endblock %}

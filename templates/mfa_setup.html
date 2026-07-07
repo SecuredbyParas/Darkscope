@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Set up MFA — {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="auth-shell">
+  <div class="ds-card auth-card p-4 p-md-5" style="max-width: 480px;">
+    <div class="eyebrow mb-2">Step 2 of 2</div>
+    <h3 class="font-mono mb-1">Set up two-factor authentication</h3>
+    <p class="text-muted-ds mb-4" style="font-size: 0.9rem;">
+      Scan this QR code with Google Authenticator, Authy, or any TOTP app, then enter the 6-digit code it shows.
+    </p>
+
+    <div class="text-center mb-4">
+      <div class="qr-frame">
+        <img src="{{ qr_data_uri }}" alt="MFA QR code" width="200" height="200">
+      </div>
+      <div class="text-muted-ds mt-2" style="font-size: 0.78rem;">Can't scan it? Enter this key manually:</div>
+      <code style="word-break: break-all;">{{ secret }}</code>
+    </div>
+
+    <form method="POST" novalidate>
+      <div class="mb-4">
+        <label class="form-label" for="otp_code">6-digit code</label>
+        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6"
+               class="form-control text-center font-mono" id="otp_code" name="otp_code"
+               style="font-size: 1.3rem; letter-spacing: 0.3em;" required autofocus>
+      </div>
+      <button type="submit" class="btn btn-ds-accent w-100 py-2">Verify & activate MFA</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

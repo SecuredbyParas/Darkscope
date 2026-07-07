@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Threat Library — {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="eyebrow mb-2">Reference</div>
+  <h2 class="font-mono mb-2">Threat Library</h2>
+  <p class="text-muted-ds mb-5" style="max-width: 640px;">
+    A plain-language reference for the MITRE ATT&amp;CK techniques DarkScope
+    maps breach exposure to, plus the illustrative Verizon DBIR-style figures
+    used across the dashboard.
+  </p>
+
+  <div class="row g-4 mb-5">
+    <div class="col-md-3">
+      <div class="ds-card p-3 text-center">
+        <div class="font-mono fw-bold" style="font-size: 1.8rem; color: var(--danger);">{{ dbir_stats.breaches_involving_credentials_pct }}%</div>
+        <div class="text-muted-ds" style="font-size: 0.8rem;">breaches involve stolen credentials</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="ds-card p-3 text-center">
+        <div class="font-mono fw-bold" style="font-size: 1.8rem; color: var(--accent);">{{ dbir_stats.breaches_involving_phishing_pct }}%</div>
+        <div class="text-muted-ds" style="font-size: 0.8rem;">breaches involve phishing</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="ds-card p-3 text-center">
+        <div class="font-mono fw-bold" style="font-size: 1.8rem; color: #ffb84f;">{{ dbir_stats.breaches_involving_human_element_pct }}%</div>
+        <div class="text-muted-ds" style="font-size: 0.8rem;">involve a human element</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="ds-card p-3 text-center">
+        <div class="font-mono fw-bold" style="font-size: 1.8rem; color: var(--safe);">{{ dbir_stats.time_to_click_phish_minutes_median }} min</div>
+        <div class="text-muted-ds" style="font-size: 0.8rem;">median time-to-click on phishing</div>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted-ds mb-5" style="font-size: 0.72rem;">Figures are illustrative, rounded teaching estimates in the spirit of Verizon DBIR themes — not exact reproductions of the report.</p>
+
+  <h4 class="font-mono mb-3">MITRE ATT&amp;CK techniques referenced in this simulator</h4>
+  <div class="row g-3">
+    {% for code, t in techniques.items() %}
+    <div class="col-md-6">
+      <div class="technique-row h-100">
+        <div class="code">{{ code }} &middot; {{ t.tactic }}</div>
+        <div class="fw-semibold mb-1">{{ t.name }}</div>
+        <div class="text-muted-ds" style="font-size: 0.88rem;">{{ t.summary }}</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

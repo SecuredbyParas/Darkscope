@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Exposure found — {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-9">
+
+      <div class="d-flex align-items-center gap-3 mb-4">
+        <span class="status-pill danger" style="font-size: 0.85rem; padding: 0.4rem 0.9rem;">Exposure detected</span>
+        <span class="text-muted-ds font-mono">{{ email }}</span>
+      </div>
+
+      <h2 class="font-mono mb-2">This address appears in {{ matches|length }} simulated breach record{{ "s" if matches|length != 1 }}</h2>
+      <p class="text-muted-ds mb-4">
+        In a real-world scenario, this is exactly the kind of record that ends up
+        circulating on breach forums and marketplaces. Here's what each match
+        exposes, and what an attacker could actually do with it.
+      </p>
+
+      <div class="row g-3 mb-5">
+        {% for m in matches %}
+        <div class="col-md-6">
+          <div class="ds-card p-3 h-100" style="border-left: 3px solid var(--danger);">
+            <div class="d-flex justify-content-between">
+              <div class="font-mono fw-bold">{{ m.source_name }}</div>
+              <div class="text-muted-ds">{{ m.breach_year }}</div>
+            </div>
+            <div class="text-muted-ds mt-2" style="font-size: 0.85rem;">Exposed fields:</div>
+            <div class="d-flex flex-wrap gap-2 mt-1">
+              {% for f in m.exposed_fields.split(",") %}
+              <span class="mono-chip">{{ f }}</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <h4 class="font-mono mb-3">Attacker techniques this exposure enables</h4>
+      <p class="text-muted-ds mb-3" style="font-size: 0.9rem;">Mapped to MITRE ATT&amp;CK:</p>
+      <div class="mb-5">
+        {% for t in techniques %}
+        <div class="technique-row mb-3">
+          <div class="code">{{ t.code }} &middot; {{ t.tactic }}</div>
+          <div class="fw-semibold mb-1">{{ t.name }}</div>
+          <div class="text-muted-ds" style="font-size: 0.88rem;">{{ t.summary }}</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="ds-card p-4 mb-5" style="border-left: 3px solid var(--safe);">
+        <h5 class="font-mono mb-3">What to do about it</h5>
+        <ul class="mb-0" style="font-size: 0.92rem;">
+          <li class="mb-2">Change the password for this account immediately, and for any other account where you reused it.</li>
+          <li class="mb-2">Turn on multi-factor authentication everywhere it's offered — it blocks most attacks that rely on a stolen password alone.</li>
+          <li class="mb-2">Use a password manager so every account has a unique, strong password.</li>
+          <li>Watch for phishing emails that reference details from this leak — they'll feel unusually personal.</li>
+        </ul>
+      </div>
+
+      <div class="d-flex gap-3">
+        <a href="{{ url_for('scan') }}" class="btn btn-ds-outline">Scan another address</a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-ds-accent">Back to dashboard</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

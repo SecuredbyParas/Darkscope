@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Run a scan — {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="eyebrow mb-2">Breach check</div>
+      <h2 class="font-mono mb-2">Check an email address</h2>
+      <p class="text-muted-ds mb-4">
+        We'll check this address against DarkScope's simulated breach dataset.
+        Try one of the demo addresses below, or your own — nothing here touches
+        the real internet or any real breach data.
+      </p>
+
+      <div class="ds-card p-4 mb-4">
+        <form method="POST" novalidate>
+          <div class="mb-3">
+            <label class="form-label" for="email">Email address</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="demo.user1@example.com" required autofocus>
+          </div>
+          <button type="submit" class="btn btn-ds-accent w-100 py-2">Scan now</button>
+        </form>
+      </div>
+
+      <div class="text-muted-ds mb-2" style="font-size:0.8rem;">Demo addresses with simulated exposure:</div>
+      <div class="d-flex flex-wrap gap-2">
+        <span class="mono-chip">demo.user1@example.com</span>
+        <span class="mono-chip">alice.demo@example.com</span>
+        <span class="mono-chip">krishna.demo@example.com</span>
+        <span class="mono-chip">sample.victim@example.com</span>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

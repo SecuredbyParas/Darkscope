@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}{{ app_name }} — Dark Web Exposure Awareness Simulator{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row align-items-center g-5">
+    <div class="col-lg-6">
+      <div class="eyebrow mb-3">Educational Security Simulator</div>
+      <h1 class="font-mono fw-bold mb-3" style="font-size: 2.4rem; line-height: 1.25;">
+        See what a leaked<br>credential looks like<br>before it happens to you.
+      </h1>
+      <p class="text-muted-ds mb-4" style="font-size: 1.05rem;">
+        DarkScope simulates how an email address can surface inside a breach
+        dataset, then explains exactly which attacker techniques that
+        exposure enables — mapped to MITRE ATT&amp;CK, with context from
+        Verizon DBIR research.
+      </p>
+      <div class="d-flex gap-3">
+        <a href="{{ url_for('register') }}" class="btn btn-ds-accent px-4 py-2">Create free account</a>
+        <a href="{{ url_for('login') }}" class="btn btn-ds-outline px-4 py-2">Log in</a>
+      </div>
+      <div class="d-flex gap-4 mt-5">
+        <div>
+          <div class="font-mono fw-bold" style="font-size:1.4rem; color: var(--danger);">{{ "61%" }}</div>
+          <div class="text-muted-ds" style="font-size:0.78rem;">breaches involve<br>stolen credentials*</div>
+        </div>
+        <div>
+          <div class="font-mono fw-bold" style="font-size:1.4rem; color: var(--accent);">{{ "8" }}</div>
+          <div class="text-muted-ds" style="font-size:0.78rem;">MITRE ATT&amp;CK<br>techniques mapped</div>
+        </div>
+        <div>
+          <div class="font-mono fw-bold" style="font-size:1.4rem; color: var(--safe);">{{ "100%" }}</div>
+          <div class="text-muted-ds" style="font-size:0.78rem;">synthetic data —<br>zero real leaks</div>
+        </div>
+      </div>
+      <div class="text-muted-ds mt-2" style="font-size:0.7rem;">*Illustrative figure for teaching purposes, in the spirit of Verizon DBIR themes.</div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="record-card">
+        <div class="eyebrow mb-3" style="color: var(--danger);">// simulated_leak_record.json</div>
+        <div><span class="field-label">source</span> CollectionX-Demo (2019)</div>
+        <div><span class="field-label">email</span> <span class="redact-bar reveal" style="width: 160px;"></span></div>
+        <div><span class="field-label">password</span> <span class="redact-bar reveal" style="width: 110px;"></span></div>
+        <div><span class="field-label">phone</span> <span class="redact-bar reveal" style="width: 90px;"></span></div>
+        <hr class="divider-faint my-3">
+        <div class="text-muted-ds" style="font-size: 0.75rem;">mitre_techniques:</div>
+        <div class="d-flex gap-2 flex-wrap mt-2">
+          <span class="mono-chip">T1589.001</span>
+          <span class="mono-chip">T1110.001</span>
+          <span class="mono-chip">T1078</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5 pt-4 g-4">
+    <div class="col-md-4">
+      <div class="ds-card p-4 h-100">
+        <div class="status-pill accent mb-3">01 · Scan</div>
+        <h5 class="font-mono">Run a breach check</h5>
+        <p class="text-muted-ds mb-0" style="font-size: 0.9rem;">Enter an email to check it against the simulated breach dataset, safely and locally.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="ds-card p-4 h-100">
+        <div class="status-pill danger mb-3">02 · Understand</div>
+        <h5 class="font-mono">See the real risk</h5>
+        <p class="text-muted-ds mb-0" style="font-size: 0.9rem;">Every match is mapped to the MITRE ATT&amp;CK techniques it actually enables.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="ds-card p-4 h-100">
+        <div class="status-pill safe mb-3">03 · Protect</div>
+        <h5 class="font-mono">Act with confidence</h5>
+        <p class="text-muted-ds mb-0" style="font-size: 0.9rem;">Get plain-language guidance and enable MFA on your own DarkScope account.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

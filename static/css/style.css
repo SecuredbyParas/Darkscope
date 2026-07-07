@@ -1,0 +1,301 @@
+/* ===================================================================
+   DarkScope — Dark Web Exposure Awareness Simulator
+   Design tokens: "Redacted Record" theme
+   =================================================================== */
+
+:root {
+  --bg: #0b0e14;
+  --surface: #11151f;
+  --surface-2: #181d2b;
+  --redact: #1c2230;
+  --border: #232a3b;
+  --text: #e8eaed;
+  --text-muted: #8b92a5;
+  --danger: #ff3d57;
+  --danger-soft: rgba(255, 61, 87, 0.12);
+  --safe: #00d9a3;
+  --safe-soft: rgba(0, 217, 163, 0.12);
+  --accent: #4fd1ff;
+  --accent-soft: rgba(79, 209, 255, 0.12);
+  --font-display: "IBM Plex Mono", "Courier New", monospace;
+  --font-body: "Inter", -apple-system, sans-serif;
+  --radius: 6px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+.font-mono {
+  font-family: var(--font-display);
+}
+
+/* ---------- Nav ---------- */
+.ds-nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.ds-brand {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text) !important;
+}
+
+.ds-brand .dot {
+  color: var(--danger);
+}
+
+.ds-nav .nav-link {
+  color: var(--text-muted) !important;
+  font-size: 0.9rem;
+}
+
+.ds-nav .nav-link:hover,
+.ds-nav .nav-link.active {
+  color: var(--text) !important;
+}
+
+/* ---------- Redacted bar motif ---------- */
+.redact-bar {
+  display: inline-block;
+  background: var(--redact);
+  border-radius: 3px;
+  height: 0.85em;
+  vertical-align: middle;
+  position: relative;
+  overflow: hidden;
+}
+
+.redact-bar.reveal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(79, 209, 255, 0.35), transparent);
+  animation: sweep 1.8s ease-in-out infinite;
+}
+
+@keyframes sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ---------- Hero / record card ---------- */
+.record-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  line-height: 2.1;
+}
+
+.record-card .field-label {
+  color: var(--text-muted);
+  width: 90px;
+  display: inline-block;
+}
+
+/* ---------- Cards / surfaces ---------- */
+.ds-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.ds-card-header {
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0.85rem 1.25rem;
+}
+
+/* ---------- Buttons ---------- */
+.btn-ds-accent {
+  background: var(--accent);
+  border: none;
+  color: #051018;
+  font-weight: 600;
+}
+
+.btn-ds-accent:hover {
+  background: #7adcff;
+  color: #051018;
+}
+
+.btn-ds-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-ds-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-ds-danger {
+  background: var(--danger);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-ds-danger:hover {
+  background: #ff5c73;
+  color: #fff;
+}
+
+/* ---------- Status badges ---------- */
+.status-pill {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.status-pill.danger {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.status-pill.safe {
+  background: var(--safe-soft);
+  color: var(--safe);
+}
+
+.status-pill.accent {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* ---------- Forms ---------- */
+.form-control,
+.form-select {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background: var(--surface-2);
+  border-color: var(--accent);
+  color: var(--text);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+
+.form-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+label:focus-visible,
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Auth shell ---------- */
+.auth-shell {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.auth-card {
+  max-width: 420px;
+  width: 100%;
+}
+
+/* ---------- Technique tag rows ---------- */
+.technique-row {
+  border-left: 3px solid var(--danger);
+  background: var(--surface-2);
+  border-radius: 0 6px 6px 0;
+  padding: 0.75rem 1rem;
+}
+
+.technique-row .code {
+  font-family: var(--font-display);
+  color: var(--danger);
+  font-size: 0.78rem;
+}
+
+/* ---------- Misc ---------- */
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.divider-faint {
+  border-color: var(--border);
+  opacity: 1;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.text-muted-ds {
+  color: var(--text-muted) !important;
+}
+
+code, .mono-chip {
+  font-family: var(--font-display);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  color: var(--accent);
+}
+
+.qr-frame {
+  background: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+@media (max-width: 576px) {
+  .record-card {
+    font-size: 0.78rem;
+  }
+}
