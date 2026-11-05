@@ -1,14 +1,5 @@
 # DarkScope — Dark Web Exposure Awareness Simulator
 
-**Group 8**
-
-| Roll No. | Name | Reg. No. |
-|---|---|---|
-| 12503638 | Krishna | R9PV45A54 |
-| 12521707 | Devender Singh Shekhawat | R9PV45A82 |
-| 12500687 | Paras | R9PV45A49 |
-| 12525830 | Kanika Sharma | R9PV45A93 |
-
 ## What this is
 
 DarkScope is an educational web app that simulates how leaked credentials
